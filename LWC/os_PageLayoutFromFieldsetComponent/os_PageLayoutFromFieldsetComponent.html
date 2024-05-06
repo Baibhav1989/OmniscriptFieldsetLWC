@@ -1,0 +1,63 @@
+<!--  Author :      Baibhav Kumar  -->
+<template>
+    <lightning-accordion  allow-multiple-sections-open
+    onsectiontoggle={handleSectionToggle}
+    active-section-name="A" >
+       <lightning-accordion-section name="A"  label={sectionName} >  
+           <lightning-record-edit-form record-id={recordId} object-api-name={objectName} 
+           onsuccess={handleSuccess} onsubmit={validateFields} onerror={handleError} onload={handleLoad}>
+           <div class="section-text slds-var-p-top_medium" lwc:if={showDescription}>
+                <lightning-formatted-rich-text value={tabDescription}></lightning-formatted-rich-text>
+          </div>
+           <template if:true={showspinner}>
+               <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+           </template>
+               <lightning-messages data-id="message">
+               </lightning-messages>
+                   <template if:true={fields}>
+                    <div class="slds-grid slds-wrap slds-grid_pull-padded-medium slds-p-top_small">
+                        <template for:each={fields} for:item="f">
+                            <template if:true={f.editfield}>
+                                <div key={f.APIName} class="slds-col slds-size_6-of-12 slds-p-horizontal_medium">
+                                    <lightning-input-field field-name={f.APIName} variant ="standard">
+                                    </lightning-input-field>
+                                </div>
+                            </template>
+
+                            <template if:false={f.editfield}>
+                                <template if:true={f.readable}>
+                         <div key={f.APIName} class="slds-col slds-size_6-of-12 slds-p-horizontal_medium">
+                                    <div class="slds-grid slds-wrap slds-border_bottom slds-p-vertical_x-small">
+                                        <div class="slds-col">
+                                            <lightning-output-field field-name={f.APIName} variant ="standard">
+                                            </lightning-output-field>
+                                        </div>
+                                         <template if:true={f.editable}>
+                                        <div class="slds-col_bump-right slds-align-bottom">
+                                            <lightning-button-icon data-id={f.APIName} icon-name="utility:edit" variant="bare" onclick={handleEdit} class='editiconcolor'>
+                                            </lightning-button-icon>
+                                        </div>
+                                         </template>
+                                      </div>
+                                </div>
+                                </template>
+                            </template>
+                        </template>    
+                      </div>
+                   </template> 
+               <template if:true={showEditField}>  
+                   <lightning-layout  class="slds-grid slds-m-top_medium" >
+                       <lightning-layout-item key={field} class="slds-col slds-size_6-of-12">
+                           <lightning-button onclick={handleCancel} name="Cancel" label="Cancel" class="slds-float_right">
+                           </lightning-button>
+                       </lightning-layout-item>
+                       <lightning-layout-item key={field} class="slds-col slds-size_6-of-12">
+                           <lightning-button type="submit" variant="brand" name="submit" label="Save"  class="slds-float_left slds-p-left_x-small">
+                           </lightning-button>
+                       </lightning-layout-item>
+                   </lightning-layout>
+               </template>
+           </lightning-record-edit-form>
+       </lightning-accordion-section>
+   </lightning-accordion>
+</template>
